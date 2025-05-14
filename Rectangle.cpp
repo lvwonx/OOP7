@@ -1,14 +1,14 @@
 #define _USE_MATH_DEFINES
-#include <cmath> // M_PI is defined here with _USE_MATH_DEFINES
+#include <cmath> 
 #include <cstdlib>
 #include "Rectangle.h"
-#include "Manager.h" // Include Manager
+#include "Manager.h" 
 
 using namespace System::Drawing;
 
 #define MIN_RECT_SIZE 10
 #define MAX_RECT_SIZE 40
-#define MAX_RECTANGLES 10 // Define max limit for Rectangles
+#define MAX_RECTANGLES 10 
 
 ::Rectangle::Rectangle(int frameWidth, int frameHeight, int x, int y)
     : Rotator(frameWidth, frameHeight, x, y, 20, System::Drawing::Color::Magenta.ToArgb())
@@ -39,13 +39,13 @@ void ::Rectangle::draw(System::Drawing::Graphics^ g) {
 }
 
 void ::Rectangle::interact(PopObject* otherObject) {
-    // Interaction logic based on otherObject type
+    
 
     if (dynamic_cast<::Rectangle*>(otherObject) != nullptr) {
-        // Collision with another Rectangle
-        // 25% chance to create a new Rectangle
+        
+        
 
-        if ((rand() % 100) < 25) { // 25% chance
+        if ((rand() % 100) < 25) { 
             if (manager != nullptr && manager->countRectangles() < MAX_RECTANGLES) {
                 int newX = static_cast<int>((_x + otherObject->getX()) / 2.0f);
                 int newY = static_cast<int>((_y + otherObject->getY()) / 2.0f);
@@ -59,12 +59,12 @@ void ::Rectangle::interact(PopObject* otherObject) {
 
     }
     else {
-        // Collision with a different type
-        // 25% chance to remove this object (the Rectangle)
+        
+        
 
-        if ((rand() % 100) < 25) { // 25% chance
+        if ((rand() % 100) < 25) { 
             if (manager != nullptr) {
-                manager->remove(this); // Remove the current Rectangle
+                manager->remove(this); 
             }
         }
     }

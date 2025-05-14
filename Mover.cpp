@@ -1,5 +1,5 @@
 #define _USE_MATH_DEFINES
-#include <cmath> // For sqrt, atan2, cos, sin
+#include <cmath> 
 #include <cstdlib>
 #include <ctime>
 #include <cstdint>
@@ -75,12 +75,12 @@ bool Mover::interactable(PopObject* otherObject) const {
 }
 
 void Mover::interact(PopObject* popObject) {
-    // Base interact does nothing
+    
 }
 
-// Default empty implementation for doCommand
+
 void Mover::doCommand(int command) {
-    // Objects that don't handle commands will use this empty implementation
+    
 }
 
 void Mover::followTo(int targetX, int targetY) {

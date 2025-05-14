@@ -9,13 +9,13 @@
 
 #include <cmath> 
 #include <limits> 
-#include <typeinfo> // For typeid()
+#include <typeinfo> 
 
 using namespace System::Diagnostics;
 using namespace System::Drawing;
 
-// ... (constructor, destructor, add, remove, drawFrame, scaleSpeed, search, resolveCollision, destroyAll, move, doCommand, count methods remain the same) ...
-// Ensure the previous implementations of those methods are kept. I'll only show the changed methods.
+
+
 
 Manager::Manager(int frameWidth, int frameHeight) : frameWidth(frameWidth), frameHeight(frameHeight) {
     for (int i = 0; i < MAX_OBJECTS; i++) {
@@ -72,8 +72,8 @@ PopObject* Manager::search(int x, int y) {
             float objX = objects[i]->getX();
             float objY = objects[i]->getY();
             int objRadius = objects[i]->getSize();
-            float dx_search = (float)x - objX; // Renamed to avoid conflict
-            float dy_search = (float)y - objY; // Renamed to avoid conflict
+            float dx_search = (float)x - objX; 
+            float dy_search = (float)y - objY; 
             float distSq = dx_search * dx_search + dy_search * dy_search;
 
             if (distSq <= (float)(objRadius * objRadius)) {
@@ -87,25 +87,25 @@ PopObject* Manager::search(int x, int y) {
 void Manager::resolveCollision(PopObject* obj1, PopObject* obj2) {
     float x1 = obj1->getX(), y1 = obj1->getY();
     float x2 = obj2->getX(), y2 = obj2->getY();
-    float dx1_coll = obj1->getDX(), dy1_coll = obj1->getDY(); // Renamed
-    float dx2_coll = obj2->getDX(), dy2_coll = obj2->getDY(); // Renamed
+    float dx1_coll = obj1->getDX(), dy1_coll = obj1->getDY(); 
+    float dx2_coll = obj2->getDX(), dy2_coll = obj2->getDY(); 
     int r1 = obj1->getSize();
     int r2 = obj2->getSize();
 
-    float deltaX_coll = x2 - x1; // Renamed
-    float deltaY_coll = y2 - y1; // Renamed
+    float deltaX_coll = x2 - x1; 
+    float deltaY_coll = y2 - y1; 
     float distSq = deltaX_coll * deltaX_coll + deltaY_coll * deltaY_coll;
     float minRadiusSum = (float)r1 + r2;
 
-    if (distSq <= 0.0001f || distSq >= minRadiusSum * minRadiusSum) { // Added small epsilon for distSq <= 0
+    if (distSq <= 0.0001f || distSq >= minRadiusSum * minRadiusSum) { 
         return;
     }
 
     float dist = sqrt(distSq);
     float overlap = 0.5f * (minRadiusSum - dist);
 
-    // Ensure dist is not zero before division
-    float displaceX = (dist == 0) ? 1.0f : deltaX_coll / dist; // Avoid division by zero, default to horizontal displacement
+    
+    float displaceX = (dist == 0) ? 1.0f : deltaX_coll / dist; 
     float displaceY = (dist == 0) ? 0.0f : deltaY_coll / dist;
 
 
@@ -163,7 +163,7 @@ void Manager::move() {
         if (objects[i] == nullptr) continue;
         for (int j = i + 1; j < MAX_OBJECTS; j++) {
             if (objects[j] == nullptr) continue;
-            if (objects[i] == nullptr || objects[j] == nullptr) continue; // Should be redundant due to outer checks
+            if (objects[i] == nullptr || objects[j] == nullptr) continue; 
 
             if (!objects[i]->interactable(objects[j]) || !objects[j]->interactable(objects[i])) {
                 continue;
@@ -179,19 +179,19 @@ void Manager::move() {
             float distSq = deltaX_coll_move * deltaX_coll_move + deltaY_coll_move * deltaY_coll_move;
             float minRadiusSum = (float)r1 + r2;
 
-            if (distSq > 0.0001f && distSq <= minRadiusSum * minRadiusSum) { // Added small epsilon for distSq > 0
+            if (distSq > 0.0001f && distSq <= minRadiusSum * minRadiusSum) { 
                 if (objects[i] == nullptr || objects[j] == nullptr) {
                     continue;
                 }
                 resolveCollision(objects[i], objects[j]);
 
-                PopObject* objI_before_interact = objects[i]; // Store pointers before interaction
+                PopObject* objI_before_interact = objects[i]; 
                 PopObject* objJ_before_interact = objects[j];
 
-                if (objects[i] != nullptr) { // Check if obj[i] wasn't deleted by resolveCollision (it shouldn't)
+                if (objects[i] != nullptr) { 
                     objects[i]->interact(objects[j]);
                 }
-                // Check if objects[i] or objects[j] were removed by the first interact call
+                
                 bool objI_still_exists = false;
                 bool objJ_still_exists = false;
                 for (int k = 0; k < MAX_OBJECTS; ++k) {
@@ -199,8 +199,8 @@ void Manager::move() {
                     if (objects[k] == objJ_before_interact) objJ_still_exists = true;
                 }
 
-                if (objI_still_exists && objJ_still_exists) { // Check both still exist in the manager array
-                    if (objects[j] != nullptr) { // And the direct pointer is still valid (though the loop implies it is)
+                if (objI_still_exists && objJ_still_exists) { 
+                    if (objects[j] != nullptr) { 
                         objects[j]->interact(objects[i]);
                     }
                 }
@@ -289,14 +289,14 @@ PopObject* Manager::nearestFriend(PopObject* popObject) {
     if (popObject == nullptr) return nullptr;
     PopObject* nearestObj = nullptr;
     float minDist = std::numeric_limits<float>::max();
-    // Corrected: Use typeid for native C++ exact type comparison
-    // const std::type_info& popObjectTypeInfo = typeid(*popObject); // Get type_info of the passed object
+    
+    
 
     for (int i = 0; i < MAX_OBJECTS; i++) {
         PopObject* currentObj = objects[i];
-        // Corrected: Use typeid for comparison
+        
         if (currentObj != nullptr && currentObj != popObject && typeid(*currentObj) == typeid(*popObject)) {
-            if (dynamic_cast<Explosion*>(currentObj) != nullptr) continue; // Should be redundant if typeid matches a non-Explosion
+            if (dynamic_cast<Explosion*>(currentObj) != nullptr) continue; 
 
             float dist = getDistance(popObject, currentObj);
             if (dist < minDist) {
@@ -312,12 +312,12 @@ PopObject* Manager::nearestAlien(PopObject* popObject) {
     if (popObject == nullptr) return nullptr;
     PopObject* nearestObj = nullptr;
     float minDist = std::numeric_limits<float>::max();
-    // Corrected: Use typeid for native C++ exact type comparison
-    // const std::type_info& popObjectTypeInfo = typeid(*popObject);
+    
+    
 
     for (int i = 0; i < MAX_OBJECTS; i++) {
         PopObject* currentObj = objects[i];
-        // Corrected: Use typeid for comparison
+        
         if (currentObj != nullptr && currentObj != popObject && typeid(*currentObj) != typeid(*popObject)) {
             if (dynamic_cast<Explosion*>(currentObj) != nullptr) continue;
 

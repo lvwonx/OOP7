@@ -10,10 +10,10 @@ class Explosion;
 #define MAX_OBJECTS 1000
 
 class Manager {
-    // private: // Change this to public
-public: // Made public to allow iteration/access from MainForm
+    
+public: 
     PopObject* objects[MAX_OBJECTS];
-private: // Other members can remain private
+private: 
     int frameWidth, frameHeight;
 
     void resolveCollision(PopObject* obj1, PopObject* obj2);
@@ -44,8 +44,8 @@ public:
     PopObject* nearestAlien(PopObject* popObject);
     float getDistance(PopObject* obj1, PopObject* obj2) const;
 
-    // Make MAX_OBJECTS accessible if needed from other files like MainForm
-    static const int MaxObjects = MAX_OBJECTS; // Optional: Add a static const member
+    
+    static const int MaxObjects = MAX_OBJECTS; 
 };
 
 extern Manager* manager;

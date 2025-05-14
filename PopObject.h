@@ -20,6 +20,6 @@ public:
     virtual void interact(PopObject* popObject) = 0;
     virtual bool interactable(PopObject* otherObject) const = 0;
 
-    // New method for commands
+    
     virtual void doCommand(int command) = 0;
 };

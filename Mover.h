@@ -33,7 +33,7 @@ public:
     virtual void interact(PopObject* popObject) override;
     virtual bool interactable(PopObject* otherObject) const override;
 
-    // Default implementation for doCommand
+    
     virtual void doCommand(int command) override;
 
     void togglePause() { _paused = !_paused; }
